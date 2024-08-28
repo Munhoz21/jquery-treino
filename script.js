@@ -1,28 +1,62 @@
 $(document).ready(function(){
-    $('header button').click(function(){
-    $('form').slideDown();
+    $('#carrosel-images').slick({
+        autoplay:true,
+        arrows:false
+    });
+
+    $('.menu-hamburguer').click(function(){
+        $('nav').slideToggle();
     })
 
-$('#botao-cancelar').click(function(){
-    $('form').slideUp();
-})
 
+    $('#telefone').mask('(00)00000-0000')
 
-    $('form').on('submit', function(e){
-        e.preventDefault();
-        const enderecoNovaImagem = $('#endereco-imagem-nova').val();
-        const novoItem = $('<li style ="display:none"></li>');
-    $(`<img src ="${enderecoNovaImagem}" />`).appendTo(novoItem);
-    $(`
-        <div class= "overlay-imagem-link">
-            <a href="${enderecoNovaImagem}" target = "_blank" > Ver imagem em tamanho real
-            </a>
-            </div>
-        `).appendTo(novoItem);
-
-        $(novoItem).appendTo('ul')
-        $(novoItem).fadeIn();
-        $('#endereco-imagem-nova').val('')
+    $('form').validate({
+        rules:{
+            nome:{
+                required:true
+            },
+            email:{
+                required:true,
+                email:true
+            },
+            telefone:{
+                required:true
+            },
+            mensagem:{
+                required:true
+            },
+            veiculoDeInteresse:{
+                required:false
+            }
+        },
+        messages:{
+            nome: 'Por favor, insira o seu nome'
+        },
+        submitHandler: function(form){
+            console.log(form)
+        },
+        invalidHandler: function(evento,validador){
+            let camposIncorretos = validador.numberOfInvalids();
+            
+            if(camposIncorretos){
+                alert(`Existem ${camposIncorretos} campos invalidos`)
+            }
+        }
     })
-})
 
+    $('.lista-veiculos button').click(function(){
+        const destino = $('#contato');
+
+       const nomeVeiculo =  $(this).parent().find('h3').text();
+
+       $('#veiculo-interesse').val(nomeVeiculo)
+
+        $('html').animate({
+            scrollTop: destino.offset().top
+        }, 1000)
+    })
+
+
+        
+})
